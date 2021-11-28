@@ -15,6 +15,11 @@
       - tar
     state: present
 
+- name: Create group
+  group:
+    name: "wazuh"
+    state: present
+
 - include_tasks: "RedHat.yml"
   when: (ansible_os_family == "RedHat" and ansible_distribution_major_version|int > 5) or (ansible_os_family  == "RedHat" and ansible_distribution == "Amazon")
 
