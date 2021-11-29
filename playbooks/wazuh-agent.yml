@@ -2,11 +2,10 @@
 - hosts: localhost
   become: yes
   become_user: root
-  vars_files:
-    - ../roles/wazuh/ansible-wazuh-agent/defaults/main.yml
   roles:
     - ../roles/wazuh/ansible-wazuh-agent
   vars:
+    wazuh_dir: "/var/ossec"
     wazuh_managers:
       - address: 10.15.37.47
         port: 1514
@@ -18,9 +17,18 @@
         retry_interval: 5
     wazuh_agent_enrollment:
       manager_address: 10.15.37.47
+      enabled: 'yes'
       agent_name: "{{ ansible_facts.default_ipv4.address }}"
+      port: 1515
       groups: ''
+      agent_address: ''
+      ssl_cipher: HIGH:!ADH:!EXP:!MD5:!RC4:!3DES:!CAMELLIA:@STRENGTH
+      server_ca_path: ''
+      agent_certificate_path: ''
+      agent_key_path: ''
+      authorization_pass_path: "{{ wazuh_dir }}/etc/authd.pass"
       auto_method: 'yes'
+      delay_after_enrollment: 20
       use_source_ip: 'no'
     wazuh_custom_packages_installation_agent_enabled: True
     wazuh_custom_packages_installation_agent_deb_url: "https://packages.wazuh.com/4.x/apt/pool/main/w/wazuh-agent/wazuh-agent_4.2.5-1_amd64.deb"
